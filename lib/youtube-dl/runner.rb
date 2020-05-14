@@ -2,19 +2,19 @@ module YoutubeDL
   # Utility class for running and managing youtube-dl
   class Runner
     include YoutubeDL::Support
-
+    
     # @return [String] URL to download
     attr_accessor :url
-
+    
     # @return [YoutubeDL::Options] Options access.
     attr_accessor :options
-
+    
     # @return [String] Executable path
     attr_reader :executable_path
-
+    
     # @return [String] Executable name to use
     attr_accessor :executable
-
+    
     # Command Line runner initializer
     #
     # @param url [String] URL to pass to youtube-dl executable
@@ -24,45 +24,45 @@ module YoutubeDL
       @options = YoutubeDL::Options.new(options)
       @executable = 'youtube-dl'
     end
-
+    
     # Returns usable executable path for youtube-dl
     #
     # @return [String] usable executable path for youtube-dl
     def executable_path
       @executable_path ||= usable_executable_path_for(@executable)
     end
-
-    # Returns Cocaine's runner engine
+    
+    # Returns Terrapin's runner engine
     #
     # @return [CommandLineRunner] backend runner class
     def backend_runner
-      Cocaine::CommandLine.runner
+      Terrapin::CommandLine.runner
     end
-
-    # Sets Cocaine's runner engine
+    
+    # Sets Terrapin's runner engine
     #
-    # @param cocaine_runner [CommandLineRunner] backend runner class
-    # @return [Object] whatever Cocaine::CommandLine.runner= returns.
-    def backend_runner=(cocaine_runner)
-      Cocaine::CommandLine.runner = cocaine_runner
+    # @param terrapin_runner [CommandLineRunner] backend runner class
+    # @return [Object] whatever Terrapin::CommandLine.runner= returns.
+    def backend_runner=(terrapin_runner)
+      Terrapin::CommandLine.runner = terrapin_runner
     end
-
+    
     # Returns the command string without running anything
     #
     # @return [String] command line string
     def to_command
-      cocaine_line(options_to_commands).command(@options.store)
+      terrapin_line(options_to_commands).command(@options.store)
     end
     alias_method :command, :to_command
-
+    
     # Runs the command
     #
     # @return [String] the output of youtube-dl
     def run
-      cocaine_line(options_to_commands).run(@options.store)
+      terrapin_line(options_to_commands).run(@options.store)
     end
     alias_method :download, :run
-
+    
     # Options configuration.
     # Just aliases to options.configure
     #
@@ -72,12 +72,12 @@ module YoutubeDL
     def configure(*a, &b)
       options.configure(*a, &b)
     end
-
+    
     private
-
-    # Parses options and converts them to Cocaine's syntax
+    
+    # Parses options and converts them to Terrapin's syntax
     #
-    # @return [String] commands ready to do cocaine
+    # @return [String] commands ready to do terrapin
     def options_to_commands
       commands = []
       @options.sanitize_keys.each_paramized_key do |key, paramized_key|

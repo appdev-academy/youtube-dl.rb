@@ -3,10 +3,10 @@ module YoutubeDL
   class Options
     # @return [Hash] key value storage object
     attr_accessor :store
-
+    
     # @return [Array] array of keys that won't be saved to the options store
     attr_accessor :banned_keys
-
+    
     # Options initializer
     #
     # @param options [Hash] a hash of options
@@ -16,10 +16,10 @@ module YoutubeDL
       else
         @store = options.to_h
       end
-
+      
       @banned_keys = []
     end
-
+    
     # Returns options as a hash
     #
     # @return [Hash] hash of options
@@ -28,7 +28,7 @@ module YoutubeDL
       @store
     end
     alias_method :to_h, :to_hash
-
+    
     # Iterate through the paramized keys and values.
     #
     # @yield [paramized_key, value]
@@ -40,7 +40,7 @@ module YoutubeDL
         yield(paramize(key), value)
       end
     end
-
+    
     # Iterate through the keys and their paramized counterparts.
     #
     # @yield [key, paramized_key]
@@ -50,7 +50,7 @@ module YoutubeDL
         yield(key, paramize(key))
       end
     end
-
+    
     # Set options using a block
     #
     # @yield [config] self
@@ -59,7 +59,7 @@ module YoutubeDL
       remove_banned
       self
     end
-
+    
     # Get option with brackets syntax
     #
     # @param key [Object] key
@@ -69,7 +69,7 @@ module YoutubeDL
       return nil if banned? key
       @store[key.to_sym]
     end
-
+    
     # Set option with brackets syntax
     #
     # @param key [Object] key
@@ -80,7 +80,7 @@ module YoutubeDL
       return nil if banned? key
       @store[key.to_sym] = value
     end
-
+    
     # Merge options with given hash, removing banned keys, and returning a
     # new instance of Options.
     #
@@ -92,7 +92,7 @@ module YoutubeDL
       merged.send(:remove_banned)
       merged
     end
-
+    
     # Option getting and setting using ghost methods
     #
     # @param method [Symbol] method name
@@ -110,7 +110,7 @@ module YoutubeDL
         @store[method]
       end
     end
-
+    
     # Calls a block to do operations on keys
     # See sanitize_keys! for examples
     #
@@ -126,18 +126,18 @@ module YoutubeDL
         end
       end
     end
-
+    
     # Symbolizes and sanitizes keys in the option store
     #
     # @return [Object] @store
     def sanitize_keys!
       # Symbolize
       manipulate_keys! { |key_name| key_name.is_a?(Symbol) ? key_name : key_name.to_sym }
-
-      # Underscoreize (because Cocaine doesn't like hyphens)
+      
+      # Underscoreize (because Terrapin doesn't like hyphens)
       manipulate_keys! { |key_name| key_name.to_s.tr('-', '_').to_sym }
     end
-
+    
     # Symbolizes and sanitizes keys and returns a copy of self
     #
     # @return [YoutubeDL::Options] Options with sanitized keys.
@@ -146,7 +146,7 @@ module YoutubeDL
       safe_copy.sanitize_keys!
       safe_copy
     end
-
+    
     # Check if key is a banned key
     #
     # @param key [Object] key to check
@@ -154,9 +154,9 @@ module YoutubeDL
     def banned?(key)
       @banned_keys.include? key
     end
-
-  private
-
+    
+    private
+    
     # Helper function to convert option keys into command-line-friendly parameters
     #
     # @param key [Symbol, String] key to paramize
@@ -164,7 +164,7 @@ module YoutubeDL
     def paramize(key)
       key.to_s.tr('_', '-')
     end
-
+    
     # Helper to remove banned keys from store
     def remove_banned
       @store.delete_if { |key, value| banned? key }

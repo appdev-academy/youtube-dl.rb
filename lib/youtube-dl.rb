@@ -1,4 +1,4 @@
-require 'cocaine'
+require 'terrapin'
 require 'json'
 require 'ostruct'
 
@@ -12,7 +12,7 @@ require 'youtube-dl/video'
 module YoutubeDL
   extend self
   extend Support
-
+  
   # Downloads given array of URLs with any options passed
   #
   # @param urls [String, Array] URLs to download
@@ -25,27 +25,27 @@ module YoutubeDL
       YoutubeDL::Video.get(urls, options) # Urls should be singular but oh well. url = urls. There. Go cry in a corner.
     end
   end
-
+  
   alias_method :get, :download
-
+  
   # Lists extractors
   #
   # @return [Array] list of extractors
   def extractors
-    @extractors ||= cocaine_line('--list-extractors').run.split("\n")
+    @extractors ||= terrapin_line('--list-extractors').run.split("\n")
   end
-
+  
   # Returns youtube-dl's version
   #
   # @return [String] youtube-dl version
   def binary_version
-    @binary_version ||= cocaine_line('--version').run.strip
+    @binary_version ||= terrapin_line('--version').run.strip
   end
-
+  
   # Returns user agent
   #
   # @return [String] user agent
   def user_agent
-    @user_agent ||= cocaine_line('--dump-user-agent').run.strip
+    @user_agent ||= terrapin_line('--dump-user-agent').run.strip
   end
 end
